@@ -1,4 +1,6 @@
 #include "Brain.h"
+#include "ExecTimer.h"
+
 #include <string>
 #include <sstream>
 
@@ -20,13 +22,11 @@ void Brain::init(int tempsPasse){
 
 }
 
-bool Brain::start(int tempsPasse){
+bool Brain::start(){
         Logger::info("start");
-        double tStart = clock();
-        int tempsPris;
+        ExecTimer& timer=ExecTimer::Instance();
         while(!serviceIA->isFinished()){
-                tempsPris = (double)(clock() - tStart)/CLOCKS_PER_SEC + tempsPasse;
-                if(tempsPris >= 91){
+                if(timer.totalTimePassed() >= 90){
                         return false;
                 }
                 serviceIA->step();

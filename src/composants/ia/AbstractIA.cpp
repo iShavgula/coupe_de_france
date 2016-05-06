@@ -2,6 +2,7 @@
 #include "Brain.h"
 #include "Sonar.h"
 #include "Logger.h"
+#include "ExecTimer.h"
 
 
 
@@ -67,7 +68,8 @@ void AbstractIA::tourner(float puissance, float angleInDgr){
 }
 
 void AbstractIA::avancer(float puissance, bool detection, float pas){
-
+        ExecTimer& timer=ExecTimer::Instance();
+        
         bool obstacleDevant =  brain->getServicesSonar()[AVANT]->aDetecteObstacle();
 
         if(!initAvancer){
@@ -75,7 +77,24 @@ void AbstractIA::avancer(float puissance, bool detection, float pas){
                 finiComportementSimple = false;
                 compteurMoteurGauche->reset();
                 initAvancer = true;
-                brain->getServiceMouvement()->avancer(puissance);
+
+                timer.reset();
+
+                double prevPowerAdded = 0.02;
+                double curPowerSet = 0.2;
+                brain->getServiceMouvement()->avancer(curPowerSet);
+
+                while (true) {
+                        if (curPowerSet >= MAX_POWER_ALLOWED - 0.01) {
+                                break;
+                        }
+
+                        wait(0.1);
+                        prevPowerAdded *= 1.5;
+                        curPowerSet += prevPowerAdded;
+                        curPowerSet = curPowerSet < MAX_POWER_ALLOWED ? curPowerSet : MAX_POWER_ALLOWED;
+                        brain->getServiceMouvement()->avancer(curPowerSet);
+                }
         }
         if(detection){
                 Logger::debug("Detection - Avant");
@@ -86,21 +105,22 @@ void AbstractIA::avancer(float puissance, bool detection, float pas){
                 }else if(aDetecteObstacle){
                         Logger::debug("aDetecteObstacle - Avant");
                         aDetecteObstacle = false;
-                        brain->getServiceMouvement()->avancer(puissance);
+                        brain->getServiceMouvement()->avancer(MAX_POWER_ALLOWED);
                 }
         }
 
-        if(compteurMoteurGauche->read() >= pas){
+        if(compteurMoteurGauche->read() >= pas || timer.timePassed() > 7){
                 Logger::debug("Fin avancer");
                 finiComportementSimple = true;
                 brain->getServiceMouvement()->stopper(1.0);
                 initAvancer = false;
                 aDetecteObstacle = false;
-
         }
 }
 
 void AbstractIA::reculer(float puissance, bool detection, float pas){
+        ExecTimer& timer=ExecTimer::Instance();
+        
 
         bool obstacleDerriere =  brain->getServicesSonar()[ARRIERE]->aDetecteObstacle();
 
@@ -111,7 +131,24 @@ void AbstractIA::reculer(float puissance, bool detection, float pas){
                 finiComportementSimple = false;
                 compteurMoteurGauche->reset();
                 initReculer = true;
-                brain->getServiceMouvement()->reculer(puissance);
+
+                timer.reset();
+
+                double prevPowerAdded = 0.02;
+                double curPowerSet = 0.2;
+                brain->getServiceMouvement()->avancer(curPowerSet);
+
+                while (true) {
+                        if (curPowerSet >= MAX_POWER_ALLOWED - 0.01) {
+                                break;
+                        }
+
+                        wait(0.1);
+                        prevPowerAdded *= 1.5;
+                        curPowerSet += prevPowerAdded;
+                        curPowerSet = curPowerSet < MAX_POWER_ALLOWED ? curPowerSet : MAX_POWER_ALLOWED;
+                        brain->getServiceMouvement()->reculer(curPowerSet);
+                }
         }
 
         if(detection){
@@ -124,11 +161,11 @@ void AbstractIA::reculer(float puissance, bool detection, float pas){
                 }else if(aDetecteObstacle){
                         Logger::debug("aDetecteObstacle - Derriere");
                         aDetecteObstacle = false;
-                        brain->getServiceMouvement()->reculer(puissance);
+                        brain->getServiceMouvement()->reculer(MAX_POWER_ALLOWED);
                 }
         }
 
-        if(compteurMoteurGauche->read() >= pas){
+        if(compteurMoteurGauche->read() >= pas || timer.timePassed() > 7){
                 Logger::debug("Dernier if - Derriere");
                 finiComportementSimple = true;
                 brain->getServiceMouvement()->stopper(1.0);

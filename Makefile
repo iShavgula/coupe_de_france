@@ -4,7 +4,8 @@
 GCC_BIN =
 PROJECT = GPSTL-CoupeDeFrance
 MAIN = ./src/main.o
-OBJECTS = ./src/composants/Brain.o \
+OBJECTS = ./src/composants/ExecTimer.o \
+	./src/composants/Brain.o \
 	./src/composants/ia/Match.o \
 	./src/composants/ia/TestBras.o \
 	./src/composants/Sonar.o \

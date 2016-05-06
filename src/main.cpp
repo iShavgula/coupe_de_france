@@ -8,13 +8,14 @@
 #include "Sonar.h"
 #include "Gyroscope.h"
 #include "Bras.h"
+#include "ExecTimer.h"
 
 #include <time.h>
 
+#define DROITE 0
+#define GAUCHE 1
 
 int main(){
-
-
         DigitalIn powerSwitch(PB_2);
 
         powerSwitch.mode(PullUp);
@@ -25,13 +26,13 @@ int main(){
                 }
         }
 
-        clock_t tStart = clock();
-
-
+        ExecTimer& timer=ExecTimer::Instance();
+        timer.resetStart();
+        timer.reset();
 
         // Coté :
         // Si celui qu'on utilise d'habitude, 0, sinon 1.
-        int cote = 1;
+        int cote = DROITE;
 
 
         Brain* brain = new Brain();
@@ -58,7 +59,7 @@ int main(){
 
         ia->init();
 
-        bool attente = brain->start((clock() - tStart) / CLOCKS_PER_SEC);
+        bool attente = brain->start();
 
         PwmOut pwmMoteurParasol(PB_15);
         DigitalOut dirDroiteParasol(D3);
@@ -68,10 +69,9 @@ int main(){
         dirDroiteParasol=1;
         dirDroite2Parasol=0;
 
-        double tempsPris = (double)(clock() - tStart)/CLOCKS_PER_SEC;
-        if(attente){
-                wait(91 - tempsPris);
-        }
+        double tempsPris = timer.totalTimePassed();
+        int timeToWait = tempsPris >= 91 ? 0 : 91 - tempsPris;
+        wait(timeToWait);
         pwmMoteurParasol.pulsewidth_us(400);
         wait(1.2);
         pwmMoteurParasol.pulsewidth_us(0);

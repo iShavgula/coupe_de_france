@@ -16,6 +16,8 @@
 #define SUD 2
 #define OUEST 3
 
+#define MAX_POWER_ALLOWED 0.6
+
 class Brain;
 
 class Compteur {
@@ -39,7 +41,6 @@ private:
 
 class AbstractIA : public ServiceIA {
         private :
-
 
         bool initTourner;
         float sommeDeltaZ;
