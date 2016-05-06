@@ -2,6 +2,7 @@
 #include "Brain.h"
 #include "Sonar.h"
 #include "Logger.h"
+#include "ExecTimer.h"
 
 #include <time.h>
 #include <cmath>
@@ -89,6 +90,8 @@ void AbstractIA::accelerer(float puissance_desiree){
 
 void AbstractIA::avancer(float puissance_desiree, bool detection, float pas){
 
+        ExecTimer& timer=ExecTimer::Instance();
+
         bool obstacleDevant =  brain->getServicesSonar()[AVANT]->aDetecteObstacle();
 
         if(!initAvancer){
@@ -98,7 +101,9 @@ void AbstractIA::avancer(float puissance_desiree, bool detection, float pas){
                 initAvancer = true;
                 puissance_interne = PUISSANCE_MIN;
                 brain->getServiceMouvement()->avancer(puissance_interne);
+
                 temps_precedent = clock();
+                timer.reset();
         }
 
 
@@ -121,7 +126,7 @@ void AbstractIA::avancer(float puissance_desiree, bool detection, float pas){
                 }
         }
 
-        if(compteurMoteurGauche->read() >= pas){
+        if(compteurMoteurGauche->read() >= pas || timer.timePassed() > 7){
                 Logger::debug("Fin avancer");
                 finiComportementSimple = true;
                 brain->getServiceMouvement()->stopper(1.0);
@@ -130,8 +135,10 @@ void AbstractIA::avancer(float puissance_desiree, bool detection, float pas){
         }
 }
 
-
 void AbstractIA::reculer(float puissance_desiree, bool detection, float pas){
+        ExecTimer& timer=ExecTimer::Instance();
+
+
 
         bool obstacleDerriere =  brain->getServicesSonar()[ARRIERE]->aDetecteObstacle();
 
@@ -145,6 +152,7 @@ void AbstractIA::reculer(float puissance_desiree, bool detection, float pas){
                 puissance_interne = PUISSANCE_MIN;
                 brain->getServiceMouvement()->reculer(puissance_interne);
                 temps_precedent = clock();
+                            timer.reset();
         }
 
         if(puissance_interne < puissance_desiree){
@@ -152,6 +160,7 @@ void AbstractIA::reculer(float puissance_desiree, bool detection, float pas){
           accelerer(puissance_desiree);
 
           brain->getServiceMouvement()->avancer(puissance_interne);
+
         }
 
         if(detection){
@@ -165,10 +174,11 @@ void AbstractIA::reculer(float puissance_desiree, bool detection, float pas){
                         Logger::debug("aDetecteObstacle - Derriere");
                         aDetecteObstacle = false;
                         brain->getServiceMouvement()->reculer(puissance_interne);
+
                 }
         }
 
-        if(compteurMoteurGauche->read() >= pas){
+        if(compteurMoteurGauche->read() >= pas || timer.timePassed() > 7){
                 Logger::debug("Dernier if - Derriere");
                 finiComportementSimple = true;
                 brain->getServiceMouvement()->stopper(1.0);

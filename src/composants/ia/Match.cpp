@@ -26,6 +26,12 @@ bool Match::isFinished(){
 }
 
 void Match::step(){
+        // if (Timer.instance.totalTimePassed() >= 90) {
+        //         etatCourant = ETAT_STOP;
+        //         reset();
+        //         return;
+        // }
+
         dureeEtat++;
 
         switch (etatCourant) {
@@ -34,7 +40,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(0.8, DETECTION_OFF, centimeters(65));
+                avancer(0.8, DETECTION_OFF, centimeters(72));
                 if(finiComportementSimple){
                         etatCourant = ETAT_1_CHATEAU;
                         reset();
@@ -44,7 +50,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_OFF, centimeters(69));
+                reculer(1.0, DETECTION_OFF, centimeters(77));
                 if(finiComportementSimple){
                         etatCourant = ETAT_1_AVANCER;
                         reset();
@@ -60,7 +66,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(1.0, DETECTION_ON, centimeters(15));
+                avancer(1.0, DETECTION_OFF, centimeters(18));
                 if(finiComportementSimple){
                         etatCourant = ETAT_2_GAUCHE_90;
                         reset();
@@ -81,7 +87,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_ON, DISTANCE_B - centimeters(15));
+                reculer(1.0, DETECTION_OFF, centimeters(85));
                 if(finiComportementSimple){
                         etatCourant = ETAT_4_POUSSER_PORTE;
                         reset();
@@ -91,7 +97,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_OFF, centimeters(15));
+                reculer(1.0, DETECTION_OFF, centimeters(23));
                 if(finiComportementSimple){
                         etatCourant = ETAT_5_AVANCER;
                         reset();
@@ -103,7 +109,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(1.0, DETECTION_ON, centimeters(15));
+                avancer(1.0, DETECTION_ON, centimeters(18));
                 if(finiComportementSimple){
                         etatCourant = ETAT_6_DROITE_90;
                         reset();
@@ -125,7 +131,7 @@ void Match::step(){
                         etatCourantInitialise = true;
                 }
                 /* TODO DETECTION_OFF ?! */
-                avancer(1.0, DETECTION_ON, centimeters(15));
+                avancer(1.0, DETECTION_ON, centimeters(24));
                 if(finiComportementSimple){
                         etatCourant = ETAT_8_GAUCHE_90;
                         reset();
@@ -147,7 +153,7 @@ void Match::step(){
                         etatCourantInitialise = true;
                 }
                 Logger::debug("Avant reculer ETAT 9");
-                reculer(1.0, DETECTION_OFF, centimeters(15));
+                reculer(1.0, DETECTION_OFF, centimeters(23));
                 Logger::debug("Après reculer ETAT 9");
                 if(finiComportementSimple){
                         Logger::debug("Fin ETAT 9");
