@@ -3,11 +3,13 @@
 #include "Sonar.h"
 #include "Logger.h"
 
-
+#include <time.h>
+#include <cmath>
 
 AbstractIA::AbstractIA(Brain* brain){
         this->brain = brain;
         heading = NORD;
+        puissance_interne = PUISSANCE_MIN;
         initTourner = false;
         sommeDeltaZ = 0;
         compteurMoteurDroite = new Compteur(PB_14);
@@ -66,7 +68,26 @@ void AbstractIA::tourner(float puissance, float angleInDgr){
         }
 }
 
-void AbstractIA::avancer(float puissance, bool detection, float pas){
+void AbstractIA::accelerer(float puissance_desiree){
+  temps_courant = clock();
+  double delta = (double)(temps_courant - temps_precedent) / CLOCKS_PER_SEC ;
+
+  puissance_interne = PUISSANCE_MIN + ((-1 + std::pow((float)2,(float)(5/TEMPS_ACCELERATION)*((float)delta)))/100);
+
+  std::ostringstream ss1;
+  ss1 << puissance_interne;
+  Logger::info("scaling: " + std::string(ss1.str()));
+
+  if(puissance_interne >= puissance_desiree){
+    puissance_interne = puissance_desiree;
+    int cpt = compteurMoteurGauche->read();
+    std::ostringstream ss2;
+    ss2 << cpt;
+    Logger::info("FIN SCALING: " + std::string(ss2.str()));
+  }
+}
+
+void AbstractIA::avancer(float puissance_desiree, bool detection, float pas){
 
         bool obstacleDevant =  brain->getServicesSonar()[AVANT]->aDetecteObstacle();
 
@@ -75,8 +96,18 @@ void AbstractIA::avancer(float puissance, bool detection, float pas){
                 finiComportementSimple = false;
                 compteurMoteurGauche->reset();
                 initAvancer = true;
-                brain->getServiceMouvement()->avancer(puissance);
+                puissance_interne = PUISSANCE_MIN;
+                brain->getServiceMouvement()->avancer(puissance_interne);
+                temps_precedent = clock();
         }
+
+
+        if(puissance_interne < puissance_desiree){
+
+          accelerer(puissance_desiree);
+          brain->getServiceMouvement()->avancer(puissance_interne);
+        }
+
         if(detection){
                 Logger::debug("Detection - Avant");
                 if(obstacleDevant){
@@ -86,7 +117,7 @@ void AbstractIA::avancer(float puissance, bool detection, float pas){
                 }else if(aDetecteObstacle){
                         Logger::debug("aDetecteObstacle - Avant");
                         aDetecteObstacle = false;
-                        brain->getServiceMouvement()->avancer(puissance);
+                        brain->getServiceMouvement()->avancer(puissance_interne);
                 }
         }
 
@@ -96,11 +127,11 @@ void AbstractIA::avancer(float puissance, bool detection, float pas){
                 brain->getServiceMouvement()->stopper(1.0);
                 initAvancer = false;
                 aDetecteObstacle = false;
-
         }
 }
 
-void AbstractIA::reculer(float puissance, bool detection, float pas){
+
+void AbstractIA::reculer(float puissance_desiree, bool detection, float pas){
 
         bool obstacleDerriere =  brain->getServicesSonar()[ARRIERE]->aDetecteObstacle();
 
@@ -111,7 +142,16 @@ void AbstractIA::reculer(float puissance, bool detection, float pas){
                 finiComportementSimple = false;
                 compteurMoteurGauche->reset();
                 initReculer = true;
-                brain->getServiceMouvement()->reculer(puissance);
+                puissance_interne = PUISSANCE_MIN;
+                brain->getServiceMouvement()->reculer(puissance_interne);
+                temps_precedent = clock();
+        }
+
+        if(puissance_interne < puissance_desiree){
+
+          accelerer(puissance_desiree);
+
+          brain->getServiceMouvement()->avancer(puissance_interne);
         }
 
         if(detection){
@@ -124,7 +164,7 @@ void AbstractIA::reculer(float puissance, bool detection, float pas){
                 }else if(aDetecteObstacle){
                         Logger::debug("aDetecteObstacle - Derriere");
                         aDetecteObstacle = false;
-                        brain->getServiceMouvement()->reculer(puissance);
+                        brain->getServiceMouvement()->reculer(puissance_interne);
                 }
         }
 

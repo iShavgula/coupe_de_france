@@ -16,6 +16,9 @@
 #define SUD 2
 #define OUEST 3
 
+#define PUISSANCE_MIN 0.30
+#define TEMPS_ACCELERATION 1
+
 class Brain;
 
 class Compteur {
@@ -40,6 +43,9 @@ private:
 class AbstractIA : public ServiceIA {
         private :
 
+        float puissance_interne;
+        clock_t temps_courant;
+        clock_t temps_precedent;
 
         bool initTourner;
         float sommeDeltaZ;
@@ -67,8 +73,9 @@ class AbstractIA : public ServiceIA {
 
         void tourner(float puissance, float angleInDgr);
 
-        void avancer(float puissance, bool detection, float pas);
-        void reculer(float puissance, bool detection, float pas);
+        void accelerer(float puissance_desiree);
+        void avancer(float puissance_desiree, bool detection, float pas);
+        void reculer(float puissance_desiree, bool detection, float pas);
 
         int getHeading();
 

@@ -2,7 +2,7 @@
 
 #include "RandomIA.h"
 #include "TestBras.h"
-#include "Match.h"
+#include "Tests.h"
 #include "Brain.h"
 #include "Moteur.h"
 #include "Sonar.h"
@@ -39,7 +39,7 @@ int main(){
         Sonar* sonarAvant = new Sonar();
         Sonar* sonarArriere = new Sonar();
         Gyroscope* gyroscope = new Gyroscope();
-        Match* ia = new Match(brain);
+        Tests* ia = new Tests(brain);
         /* Initialisations */
         brain->init();
         moteur->init();

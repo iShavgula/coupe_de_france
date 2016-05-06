@@ -6,6 +6,7 @@ PROJECT = GPSTL-CoupeDeFrance
 MAIN = ./src/main.o
 OBJECTS = ./src/composants/Brain.o \
 	./src/composants/ia/Match.o \
+	./src/composants/ia/Tests.o \
 	./src/composants/ia/TestBras.o \
 	./src/composants/Sonar.o \
 	./src/composants/ia/AbstractIA.o \
