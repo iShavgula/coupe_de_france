@@ -32,7 +32,7 @@ int main(){
 
         // Coté :
         // Si celui qu'on utilise d'habitude, 0, sinon 1.
-        int cote = DROITE;
+        int cote = GAUCHE;
 
 
         Brain* brain = new Brain();
