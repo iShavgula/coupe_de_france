@@ -50,7 +50,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_OFF, centimeters(77));
+                reculer(0.8, DETECTION_OFF, centimeters(78));
                 if(finiComportementSimple){
                         etatCourant = ETAT_1_AVANCER;
                         reset();
@@ -58,7 +58,7 @@ void Match::step(){
                 break;
 
                 case ETAT_0_ATTENTE :
-                wait(1);
+                wait(0.1);
                 etatCourant = ETAT_1_AVANCER;
                 break;
 
@@ -66,7 +66,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(1.0, DETECTION_OFF, centimeters(18));
+                avancer(0.8, DETECTION_OFF, centimeters(18));
                 if(finiComportementSimple){
                         etatCourant = ETAT_2_GAUCHE_90;
                         reset();
@@ -87,7 +87,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_OFF, centimeters(85));
+                reculer(0.8, DETECTION_OFF, centimeters(70));
                 if(finiComportementSimple){
                         etatCourant = ETAT_4_POUSSER_PORTE;
                         reset();
@@ -97,7 +97,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                reculer(1.0, DETECTION_OFF, centimeters(23));
+                reculer(0.8, DETECTION_OFF, centimeters(15));
                 if(finiComportementSimple){
                         etatCourant = ETAT_5_AVANCER;
                         reset();
@@ -109,7 +109,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(1.0, DETECTION_ON, centimeters(18));
+                avancer(0.8, DETECTION_OFF, centimeters(18));
                 if(finiComportementSimple){
                         etatCourant = ETAT_6_DROITE_90;
                         reset();
@@ -119,7 +119,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                tournerAngleDroitDroite(0.8);
+                tournerAngleDroitDroite(0.7);
                 if(finiComportementSimple){
                         etatCourant = ETAT_7_AVANCER;
                         reset();
@@ -131,7 +131,7 @@ void Match::step(){
                         etatCourantInitialise = true;
                 }
                 /* TODO DETECTION_OFF ?! */
-                avancer(1.0, DETECTION_ON, centimeters(24));
+                avancer(0.8, DETECTION_OFF, centimeters(24));
                 if(finiComportementSimple){
                         etatCourant = ETAT_8_GAUCHE_90;
                         reset();
@@ -141,7 +141,7 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                tournerAngleDroitGauche(0.8);
+                tournerAngleDroitGauche(0.7);
                 if(finiComportementSimple){
                         etatCourant = ETAT_9_POUSSER_PORTE;
                         reset();
@@ -153,7 +153,7 @@ void Match::step(){
                         etatCourantInitialise = true;
                 }
                 Logger::debug("Avant reculer ETAT 9");
-                reculer(1.0, DETECTION_OFF, centimeters(23));
+                reculer(0.8, DETECTION_OFF, centimeters(23));
                 Logger::debug("Après reculer ETAT 9");
                 if(finiComportementSimple){
                         Logger::debug("Fin ETAT 9");
@@ -165,12 +165,162 @@ void Match::step(){
                 if(!etatCourantInitialise){
                         etatCourantInitialise = true;
                 }
-                avancer(1.0, DETECTION_ON, centimeters(75));
+                avancer(0.8, DETECTION_OFF, centimeters(82));
                 if(finiComportementSimple){
-                        etatCourant = ETAT_STOP;
+                        etatCourant = ETAT_200_GAUCHE_90;
                         reset();
                 }
-
+                break;
+                case ETAT_200_GAUCHE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tourner(0.8, 70);
+                if(finiComportementSimple){
+                    etatCourant = ETAT_20_AVANCER;
+                    reset();
+                }
+                break;
+                case ETAT_20_AVANCER:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF,centimeters(70));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_28_GAUCHE_90;
+                    reset();
+                }
+                break;
+                case ETAT_28_GAUCHE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tourner(0.8, -65);
+                if(finiComportementSimple){
+                    etatCourant = ETAT_25_AVANCER_UN_PEU;
+                    reset();
+                }
+                break;
+                case ETAT_25_AVANCER_UN_PEU:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF, centimeters(16));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_29_GAUCHE_90;
+                    reset();
+                }
+                break;
+                case ETAT_29_GAUCHE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tournerAngleDroitGauche(0.9);
+                if(finiComportementSimple){
+                    etatCourant = ETAT_211_AVANCER;
+                    reset();
+                }
+                break;
+                case ETAT_211_AVANCER:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF, centimeters(75));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_210_GAUCHE_90;
+                    reset();
+                }
+                break;
+                case ETAT_210_GAUCHE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                reculer(0.8,DETECTION_OFF, centimeters(75));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_26_DROITE_90;
+                    reset();
+                }
+                break;
+                case ETAT_26_DROITE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tournerAngleDroitDroite(0.9);
+                if(finiComportementSimple){
+                    etatCourant = ETAT_212_AVANCER_UN_PEU;
+                    reset();
+                }
+                break;
+                case  ETAT_212_AVANCER_UN_PEU:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF,centimeters(20));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_213_GAUCHE_90;
+                    reset();
+                }
+                break;
+                case ETAT_213_GAUCHE_90:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tournerAngleDroitGauche(0.9);
+                if(finiComportementSimple){
+                    etatCourant = ETAT_214_AVANCER;
+                    reset();
+                }
+                break;
+                case ETAT_214_AVANCER:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF,centimeters(62));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_215_GAUCHE_45;
+                    reset();
+                }
+                break;
+                case ETAT_215_GAUCHE_45:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tourner(0.8,-25); //45 à gauche en fait
+                if(finiComportementSimple) {
+                    etatCourant = ETAT_216_AVANCER_UN_PEU;
+                    reset();
+                }
+                break;
+                case ETAT_216_AVANCER_UN_PEU:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8,DETECTION_OFF,centimeters(40));
+                if(finiComportementSimple) {
+                    etatCourant = ETAT_STOP;
+                    reset();
+                }
+                break;
+                case ETAT_217_GAUCHE_45:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                tourner(0.8,-30); //45 à gauche en fait
+                if(finiComportementSimple){
+                    etatCourant = ETAT_218_AVANCER_UN_PEU;
+                    reset();
+                }
+                break;
+                case ETAT_218_AVANCER_UN_PEU:
+                if(!etatCourantInitialise){
+                        etatCourantInitialise = true;
+                }
+                avancer(0.8, DETECTION_OFF,centimeters(2));
+                if(finiComportementSimple){
+                    etatCourant = ETAT_STOP;
+                    reset();
+                }
+                break;
         }
 
 }

@@ -69,6 +69,7 @@ int main(){
         dirDroiteParasol=1;
         dirDroite2Parasol=0;
 
+
         double tempsPris = timer.totalTimePassed();
         int timeToWait = tempsPris >= 91 ? 0 : 91 - tempsPris;
         wait(timeToWait);
