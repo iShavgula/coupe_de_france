@@ -1,0 +1,19 @@
+DONE
+=======
+Composants
+-> Code avec implems bouchons
+-> Implémentation du Sonar + Moteur + IA Basique
+-> Intégré Logger
+
+TODO
+=======
+Régler problème comportement basique
+Intégration du gyro fait par la R&D -> Tourner à 90°
+|
+ -> Faire le composant Gyro
+
+Intégrer deuxième sonar
+
+Analog IN quand il galère : PA_0 PA_1
+
+Amine -> Go ateliers pour gyro
